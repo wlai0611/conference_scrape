@@ -34,8 +34,10 @@ def get_title_author_abstract(filename):
 def rename_files(folder):
     html_folder = Path(folder)
     for file in html_folder.iterdir():
-        old_filename = file.name
         filename_pattern = "([0-9]{4})-([0-9]{2}), Number ([0-9]{1,})"
-        year, season, section = re.findall(pattern=filename_pattern, string=old_filename)[0]
-        new_filename = f"{year}-{season}-{section}.html"
-        file.rename( html_folder / new_filename )
+        old_filename     = file.name
+        this_file_matches_the_pattern = re.findall(pattern=filename_pattern, string=old_filename)
+        if file.is_file() and this_file_matches_the_pattern:
+            year, season, section = this_file_matches_the_pattern[0]
+            new_filename = f"{year}-{season}-{section}.html"
+            file.rename( html_folder / new_filename )
